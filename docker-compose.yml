@@ -1,0 +1,52 @@
+services:
+  catalog-service:
+    build: ./services/catalog-service
+    container_name: t2-catalog
+    ports:
+      - "5001:5001"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5001/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  payment-service:
+    build: ./services/payment-service
+    container_name: t2-payment
+    ports:
+      - "5002:5002"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5002/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  order-service:
+    build: ./services/order-service
+    container_name: t2-order
+    ports:
+      - "5003:5003"
+    environment:
+      CATALOG_SERVICE_URL: http://catalog-service:5001
+      PAYMENT_SERVICE_URL: http://payment-service:5002
+    depends_on:
+      catalog-service:
+        condition: service_healthy
+      payment-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5003/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  api-gateway:
+    build: ./services/api-gateway
+    container_name: t2-gateway
+    ports:
+      - "5000:5000"
+    environment:
+      ORDER_SERVICE_URL: http://order-service:5003
+    depends_on:
+      order-service:
+        condition: service_healthy

@@ -1,0 +1,52 @@
+# Render Blueprint — T2 Delivery
+# Deploy: Dashboard Render → New → Blueprint → conecte este repositório
+
+services:
+  - type: web
+    name: t2-catalog
+    runtime: docker
+    dockerfilePath: ./services/catalog-service/Dockerfile
+    dockerContext: ./services/catalog-service
+    plan: free
+    healthCheckPath: /health
+
+  - type: web
+    name: t2-payment
+    runtime: docker
+    dockerfilePath: ./services/payment-service/Dockerfile
+    dockerContext: ./services/payment-service
+    plan: free
+    healthCheckPath: /health
+
+  - type: web
+    name: t2-order
+    runtime: docker
+    dockerfilePath: ./services/order-service/Dockerfile
+    dockerContext: ./services/order-service
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: CATALOG_SERVICE_URL
+        fromService:
+          name: t2-catalog
+          type: web
+          property: hostport
+      - key: PAYMENT_SERVICE_URL
+        fromService:
+          name: t2-payment
+          type: web
+          property: hostport
+
+  - type: web
+    name: t2-gateway
+    runtime: docker
+    dockerfilePath: ./services/api-gateway/Dockerfile
+    dockerContext: ./services/api-gateway
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: ORDER_SERVICE_URL
+        fromService:
+          name: t2-order
+          type: web
+          property: hostport
