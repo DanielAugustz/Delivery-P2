@@ -38,7 +38,7 @@ services:
           envVarKey: RENDER_EXTERNAL_URL
 
   - type: web
-    name: t2-gateway
+    name: delivery-p2
     runtime: docker
     dockerfilePath: ./services/api-gateway/Dockerfile
     dockerContext: ./services/api-gateway
