@@ -30,12 +30,12 @@ services:
         fromService:
           name: t2-catalog
           type: web
-          property: hostport
+          envVarKey: RENDER_EXTERNAL_URL
       - key: PAYMENT_SERVICE_URL
         fromService:
           name: t2-payment
           type: web
-          property: hostport
+          envVarKey: RENDER_EXTERNAL_URL
 
   - type: web
     name: t2-gateway
@@ -49,4 +49,4 @@ services:
         fromService:
           name: t2-order
           type: web
-          property: hostport
+          envVarKey: RENDER_EXTERNAL_URL
