@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>T2 Delivery</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="page">
+    <header><h1>T2 Delivery</h1></header>
+    <main class="grid">
+      <section>
+        <h2>Novo pedido</h2>
+        <form id="form-pedido">
+          <label>Produto
+            <select id="select-produto" name="tipo_produto" required>
+              <option value="" disabled selected>Selecione...</option>
+              <option value="PIZZA">Pizza Grande — R$ 50,00</option>
+              <option value="BURGER">Hambúrguer Artesanal — R$ 30,00</option>
+            </select>
+          </label>
+          <label>Pagamento
+            <select name="metodo_pagamento" required>
+              <option value="" disabled selected>Selecione...</option>
+              <option value="PIX">PIX (5% desconto)</option>
+              <option value="CARTAO">Cartão</option>
+            </select>
+          </label>
+          <p id="valor-produto" class="valor">Valor: —</p>
+          <button type="submit" id="btn-enviar">Fazer pedido</button>
+        </form>
+      </section>
+      <section>
+        <div class="card-header">
+          <h2>Pedidos realizados</h2>
+          <button type="button" id="btn-atualizar">Atualizar</button>
+        </div>
+        <p id="total-pedidos" class="total">Total: 0</p>
+        <ul id="lista-pedidos" class="lista"></ul>
+        <p id="lista-vazia" class="vazio">Nenhum pedido ainda.</p>
+      </section>
+    </main>
+    <div id="resultado" class="resultado hidden"></div>
+  </div>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

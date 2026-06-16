@@ -1,0 +1,16 @@
+* { box-sizing: border-box; }
+body { margin: 0; padding: 1.5rem; background: #f8fafc; color: #0f172a; font-family: "Segoe UI", sans-serif; font-size: 14px; }
+.page { max-width: 960px; margin: 0 auto; }
+h1 { margin: 0; font-size: 1.75rem; color: #1e40af; }
+h2 { margin: 0 0 1rem; font-size: 1rem; }
+.grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+section { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.25rem; }
+label { display: block; margin-bottom: 0.85rem; font-weight: 500; }
+select, button { display: block; width: 100%; margin-top: 0.35rem; font: inherit; padding: 0.5rem; border-radius: 6px; border: 1px solid #cbd5e1; }
+button { width: auto; cursor: pointer; background: #1e40af; color: #fff; border-color: #1e40af; font-weight: 600; }
+.card-header { display: flex; justify-content: space-between; align-items: center; }
+.card-header button { background: #fff; color: #1e40af; }
+.lista { padding-left: 1.25rem; }
+.resultado { margin-top: 1.5rem; padding: 1rem; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; white-space: pre-line; }
+.resultado.hidden { display: none; }
+.resultado.erro { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
