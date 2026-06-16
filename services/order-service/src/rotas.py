@@ -4,11 +4,46 @@ import os
 
 from flask import Blueprint, jsonify, request
 
-from pedido_casos_uso import CasoUsoCriarPedido, CasoUsoListarPedidos
+from pedido_casos_uso import CasoUsoCriarPedido, CasoUsoExcluirPedido, CasoUsoListarPedidos
 from pedido_infra import AdaptadorCatalogoHttp, AdaptadorPagamentoHttp, RepositorioPedidoMemoria
 
 order_bp = Blueprint("order", __name__)
 _repositorio = RepositorioPedidoMemoria.obter_instancia()
+
+
+def _pedido_para_dict(pedido) -> dict:
+    return {
+        "id": pedido.id,
+        "produtos": pedido.resumo_produtos(),
+        "itens": [
+            {
+                "codigo": i.codigo,
+                "nome": i.nome,
+                "preco_unitario": i.preco_unitario,
+                "quantidade": i.quantidade,
+                "subtotal": i.subtotal,
+            }
+            for i in pedido.itens
+        ],
+        "valor_original": pedido.preco_original,
+        "valor_final": pedido.preco_final,
+        "metodo_pagamento": pedido.metodo_pagamento,
+        "criado_em": pedido.criado_em,
+    }
+
+
+def _extrair_itens(dados: dict):
+    if itens := dados.get("itens"):
+        if isinstance(itens, list):
+            return itens
+    if produtos := dados.get("produtos"):
+        if isinstance(produtos, dict):
+            return produtos
+        if isinstance(produtos, list):
+            return produtos
+    if tipo := dados.get("tipo_produto"):
+        return [str(tipo)]
+    return []
 
 
 @order_bp.get("/health")
@@ -24,7 +59,7 @@ def criar_pedido():
             AdaptadorCatalogoHttp(os.getenv("CATALOG_SERVICE_URL")),
             AdaptadorPagamentoHttp(os.getenv("PAYMENT_SERVICE_URL")),
             _repositorio,
-        ).executar(str(dados.get("tipo_produto", "")), str(dados.get("metodo_pagamento", "")))
+        ).executar(_extrair_itens(dados), str(dados.get("metodo_pagamento", "")))
     except ValueError as erro:
         return jsonify({"erro": str(erro)}), 400
 
@@ -33,16 +68,8 @@ def criar_pedido():
     return jsonify(
         {
             "log": linhas_log,
-            "pedido": {
-                "id": pedido.id,
-                "produto": pedido.nome_produto,
-                "codigo_produto": pedido.codigo_produto,
-                "valor_original": pedido.preco_original,
-                "valor_final": pedido.preco_final,
-                "metodo_pagamento": pedido.metodo_pagamento,
-                "criado_em": pedido.criado_em,
-            },
-            "produto": pedido.nome_produto,
+            "pedido": _pedido_para_dict(pedido),
+            "produto": pedido.resumo_produtos(),
             "valor": pedido.preco_original,
         }
     ), 201
@@ -51,4 +78,13 @@ def criar_pedido():
 @order_bp.get("/pedidos")
 def listar_pedidos():
     pedidos = CasoUsoListarPedidos(_repositorio).executar()
-    return jsonify({"pedidos": [p.nome_produto for p in pedidos], "total": len(pedidos)})
+    return jsonify({"pedidos": [_pedido_para_dict(p) for p in pedidos], "total": len(pedidos)})
+
+
+@order_bp.delete("/pedidos/<pedido_id>")
+def excluir_pedido(pedido_id: str):
+    try:
+        CasoUsoExcluirPedido(_repositorio).executar(pedido_id)
+    except ValueError as erro:
+        return jsonify({"erro": str(erro)}), 404
+    return jsonify({"mensagem": "Pedido excluído", "total": _repositorio.contar()})

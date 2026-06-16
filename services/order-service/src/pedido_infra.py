@@ -45,6 +45,13 @@ class RepositorioPedidoMemoria(RepositorioPedido):
     def contar(self) -> int:
         return len(self._pedidos)
 
+    def excluir(self, pedido_id: str) -> bool:
+        for indice, pedido in enumerate(self._pedidos):
+            if pedido.id == pedido_id:
+                del self._pedidos[indice]
+                return True
+        return False
+
     @classmethod
     def resetar_para_testes(cls) -> None:
         if cls._instancia is not None:

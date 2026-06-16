@@ -37,7 +37,7 @@ def realizar_pedido(contexto, produto: str, metodo: str):
     repo = RepositorioPedidoMemoria.obter_instancia()
     contexto["pedido"] = CasoUsoCriarPedido(
         AdaptadorCatalogoMemoria(), AdaptadorPagamentoMemoria(), repo
-    ).executar(produto, metodo)
+    ).executar([produto], metodo)
 
 
 @when(parsers.parse('eu tento realizar um pedido de "{produto}" com pagamento "{metodo}"'))
@@ -46,7 +46,7 @@ def tentar_realizar_pedido(contexto, produto: str, metodo: str):
     try:
         contexto["pedido"] = CasoUsoCriarPedido(
             AdaptadorCatalogoMemoria(), AdaptadorPagamentoMemoria(), repo
-        ).executar(produto, metodo)
+        ).executar([produto], metodo)
         contexto["erro"] = None
     except ValueError as erro:
         contexto["erro"] = str(erro)

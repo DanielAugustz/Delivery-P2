@@ -33,16 +33,32 @@ def health():
 @app.post("/pedido")
 def criar_pedido():
     dados = request.get_json(silent=True) or {}
+    itens = dados.get("itens")
+    if not itens:
+        produtos = dados.get("produtos") or []
+        if isinstance(produtos, list) and produtos:
+            itens = produtos
+        elif dados.get("tipo_produto"):
+            itens = [dados.get("tipo_produto")]
+        else:
+            itens = []
     try:
-        resultado = _fachada.criar_pedido(
-            str(dados.get("tipo_produto", "")),
-            str(dados.get("metodo_pagamento", "")),
-        )
+        resultado = _fachada.criar_pedido(itens, str(dados.get("metodo_pagamento", "")))
     except ValueError as erro:
         return jsonify({"erro": str(erro)}), 400
     except Exception as erro:
         return jsonify({"erro": f"Serviço indisponível: {erro}"}), 503
     return jsonify(resultado), 201
+
+
+@app.delete("/pedido/<pedido_id>")
+def excluir_pedido(pedido_id: str):
+    try:
+        return jsonify(_fachada.excluir_pedido(pedido_id))
+    except ValueError as erro:
+        return jsonify({"erro": str(erro)}), 404
+    except Exception as erro:
+        return jsonify({"erro": f"Serviço indisponível: {erro}"}), 503
 
 
 @app.get("/pedidos")

@@ -10,7 +10,13 @@ select, button { display: block; width: 100%; margin-top: 0.35rem; font: inherit
 button { width: auto; cursor: pointer; background: #1e40af; color: #fff; border-color: #1e40af; font-weight: 600; }
 .card-header { display: flex; justify-content: space-between; align-items: center; }
 .card-header button { background: #fff; color: #1e40af; }
-.lista { padding-left: 1.25rem; }
+.lista { padding-left: 0; list-style: none; }
+.item-pedido { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0; }
+.btn-excluir { background: #fff; color: #b91c1c; border-color: #fecaca; font-size: 0.85rem; padding: 0.35rem 0.65rem; }
+.produtos { border: none; padding: 0; margin: 0 0 0.85rem; }
+.produtos legend { font-weight: 500; margin-bottom: 0.5rem; }
+.linha-produto { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; margin-bottom: 0.65rem; font-weight: 400; }
+.linha-produto input { width: 4.5rem; margin: 0; text-align: center; }
 .resultado { margin-top: 1.5rem; padding: 1rem; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; white-space: pre-line; }
 .resultado.hidden { display: none; }
 .resultado.erro { background: #fef2f2; border-color: #fecaca; color: #991b1b; }

@@ -13,13 +13,17 @@
       <section>
         <h2>Novo pedido</h2>
         <form id="form-pedido">
-          <label>Produto
-            <select id="select-produto" name="tipo_produto" required>
-              <option value="" disabled selected>Selecione...</option>
-              <option value="PIZZA">Pizza Grande — R$ 50,00</option>
-              <option value="BURGER">Hambúrguer Artesanal — R$ 30,00</option>
-            </select>
-          </label>
+          <fieldset class="produtos">
+            <legend>Produtos (quantidade)</legend>
+            <div class="linha-produto">
+              <span>Pizza Grande — R$ 50,00</span>
+              <input type="number" name="qtd_PIZZA" min="0" max="99" value="0" aria-label="Quantidade de pizza">
+            </div>
+            <div class="linha-produto">
+              <span>Hambúrguer Artesanal — R$ 30,00</span>
+              <input type="number" name="qtd_BURGER" min="0" max="99" value="0" aria-label="Quantidade de hambúrguer">
+            </div>
+          </fieldset>
           <label>Pagamento
             <select name="metodo_pagamento" required>
               <option value="" disabled selected>Selecione...</option>
@@ -27,7 +31,7 @@
               <option value="CARTAO">Cartão</option>
             </select>
           </label>
-          <p id="valor-produto" class="valor">Valor: —</p>
+          <p id="valor-produto" class="valor">Subtotal: —</p>
           <button type="submit" id="btn-enviar">Fazer pedido</button>
         </form>
       </section>

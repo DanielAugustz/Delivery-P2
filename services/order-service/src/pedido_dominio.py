@@ -7,24 +7,44 @@ from typing import List
 from uuid import uuid4
 
 
+@dataclass(frozen=True)
+class ItemPedido:
+    codigo: str
+    nome: str
+    preco_unitario: float
+    quantidade: int = 1
+
+    @property
+    def subtotal(self) -> float:
+        return self.preco_unitario * self.quantidade
+
+
 @dataclass
 class Pedido:
     id: str = field(default_factory=lambda: str(uuid4())[:8])
-    codigo_produto: str = ""
-    nome_produto: str = ""
+    itens: List[ItemPedido] = field(default_factory=list)
     preco_original: float = 0.0
     preco_final: float = 0.0
     metodo_pagamento: str = ""
     mensagem_pagamento: str = ""
     criado_em: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
+    def resumo_produtos(self) -> str:
+        partes = []
+        for item in self.itens:
+            prefixo = f"{item.quantidade}x " if item.quantidade > 1 else ""
+            partes.append(f"{prefixo}{item.nome}")
+        return ", ".join(partes)
+
     def linhas_resumo(self) -> list[str]:
-        return [
-            "--- Último Pedido Feito ---",
-            f"Produto: {self.nome_produto}",
-            f"Valor do produto: R$ {self.preco_original:.2f}",
-            self.mensagem_pagamento,
-        ]
+        linhas = ["--- Pedido Feito ---"]
+        for item in self.itens:
+            prefixo = f"{item.quantidade}x " if item.quantidade > 1 else ""
+            linhas.append(f"  {prefixo}{item.nome}: R$ {item.subtotal:.2f}")
+        linhas.append(f"Subtotal: R$ {self.preco_original:.2f}")
+        linhas.append(self.mensagem_pagamento)
+        linhas.append(f"Total: R$ {self.preco_final:.2f}")
+        return linhas
 
 
 class RepositorioPedido(ABC):
@@ -38,6 +58,10 @@ class RepositorioPedido(ABC):
 
     @abstractmethod
     def contar(self) -> int:
+        pass
+
+    @abstractmethod
+    def excluir(self, pedido_id: str) -> bool:
         pass
 
 
