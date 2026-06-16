@@ -15,6 +15,13 @@ from pedido_dominio import (
 )
 
 
+def _normalizar_url(url: str) -> str:
+    url = url.strip().rstrip("/")
+    if not url.startswith(("http://", "https://")):
+        url = f"http://{url}"
+    return url
+
+
 class RepositorioPedidoMemoria(RepositorioPedido):
     _instancia: RepositorioPedidoMemoria | None = None
 
@@ -46,9 +53,9 @@ class RepositorioPedidoMemoria(RepositorioPedido):
 
 class AdaptadorCatalogoHttp(PortaCatalogo):
     def __init__(self, url_base: str | None = None) -> None:
-        self._url_base = (
+        self._url_base = _normalizar_url(
             url_base or os.getenv("CATALOG_SERVICE_URL", "http://catalog-service:5001")
-        ).rstrip("/")
+        )
 
     def obter_produto(self, codigo: str) -> InfoProduto:
         resposta = requests.get(f"{self._url_base}/produtos/{codigo}", timeout=10)
@@ -61,9 +68,9 @@ class AdaptadorCatalogoHttp(PortaCatalogo):
 
 class AdaptadorPagamentoHttp(PortaPagamento):
     def __init__(self, url_base: str | None = None) -> None:
-        self._url_base = (
+        self._url_base = _normalizar_url(
             url_base or os.getenv("PAYMENT_SERVICE_URL", "http://payment-service:5002")
-        ).rstrip("/")
+        )
 
     def processar(self, valor: float, metodo: str) -> InfoPagamento:
         resposta = requests.post(

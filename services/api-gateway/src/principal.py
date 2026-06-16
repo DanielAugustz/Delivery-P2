@@ -22,10 +22,12 @@ def index():
 
 @app.get("/health")
 def health():
+    payload: dict = {"status": "ok", "service": "api-gateway"}
     try:
-        return jsonify({"status": "ok", "service": "api-gateway", "order_service": _fachada.verificar_saude()})
+        payload["order_service"] = _fachada.verificar_saude()
     except Exception as erro:
-        return jsonify({"status": "degraded", "erro": str(erro)}), 503
+        payload["order_service"] = {"status": "unreachable", "erro": str(erro)}
+    return jsonify(payload)
 
 
 @app.post("/pedido")

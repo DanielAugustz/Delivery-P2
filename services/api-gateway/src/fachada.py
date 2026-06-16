@@ -5,13 +5,20 @@ import os
 import requests
 
 
+def _normalizar_url(url: str) -> str:
+    url = url.strip().rstrip("/")
+    if not url.startswith(("http://", "https://")):
+        url = f"http://{url}"
+    return url
+
+
 class FachadaServicoPedidos:
     """Facade Pattern — simplifica acesso ao order-service."""
 
     def __init__(self, url_servico_pedidos: str | None = None) -> None:
-        self._url_base = (
+        self._url_base = _normalizar_url(
             url_servico_pedidos or os.getenv("ORDER_SERVICE_URL", "http://order-service:5003")
-        ).rstrip("/")
+        )
 
     def criar_pedido(self, tipo_produto: str, metodo_pagamento: str) -> dict:
         resposta = requests.post(

@@ -8,6 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY src/ ./src/
 
 ENV PYTHONPATH=/app/src
+ENV PORT=5001
 EXPOSE 5001
 
-CMD ["gunicorn", "--bind", "0.0.0.0:5001", "principal:app"]
+CMD sh -c "gunicorn --bind 0.0.0.0:${PORT} principal:app"
