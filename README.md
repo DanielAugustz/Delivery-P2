@@ -10,7 +10,7 @@ Arquitetura de **4 microsserviços** com Arquitetura Limpa, SOLID, TDD e BDD.
 | order-service | 5003 | Pedidos |
 | api-gateway | 5000 | Interface web |
 
-**Deploy:** https://sistema-pedidos.onrender.com  
+**Deploy:** https://sistema-pedidos-3fgz.onrender.com/  
 **Documentação:** [docs/DOCUMENTACAO_PROVA.md](docs/DOCUMENTACAO_PROVA.md)
 
 ## Executar com Docker
