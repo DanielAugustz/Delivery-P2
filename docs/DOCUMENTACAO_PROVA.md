@@ -1,4 +1,4 @@
-# Documentação de Entrega — Prova T2 Delivery
+# Documentação de Entrega — Prova
 
 ## 1. Descrição do Problema
 
