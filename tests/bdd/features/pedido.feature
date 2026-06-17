@@ -1,5 +1,5 @@
 # language: pt
-Funcionalidade: Realizar pedido no T2 Delivery
+Funcionalidade: Realizar pedido no Sistema de Pedidos
   Como cliente de delivery
   Eu quero fazer pedidos de comida
   Para receber refeições com pagamento conveniente

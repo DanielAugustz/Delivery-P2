@@ -1,4 +1,4 @@
-# Plataforma de Pedidos (Prova Acadêmica)
+# Sistema de Pedidos (Prova Acadêmica)
 
 Plataforma de delivery com pizza e hambúrguer. Pagamento PIX (5% desconto) ou cartão.
 Arquitetura de **4 microsserviços** com Arquitetura Limpa, SOLID, TDD e BDD.
@@ -10,7 +10,7 @@ Arquitetura de **4 microsserviços** com Arquitetura Limpa, SOLID, TDD e BDD.
 | order-service | 5003 | Pedidos |
 | api-gateway | 5000 | Interface web |
 
-**Deploy:** https://t2-gateway.onrender.com  
+**Deploy:** https://sistema-pedidos.onrender.com  
 **Documentação:** [docs/DOCUMENTACAO_PROVA.md](docs/DOCUMENTACAO_PROVA.md)
 
 ## Executar com Docker

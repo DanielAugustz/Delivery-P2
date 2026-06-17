@@ -1,23 +1,23 @@
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: t2-postgres
+    container_name: pedidos-postgres
     environment:
-      POSTGRES_USER: t2delivery
-      POSTGRES_PASSWORD: t2delivery
-      POSTGRES_DB: t2delivery
+      POSTGRES_USER: sistema_pedidos
+      POSTGRES_PASSWORD: sistema_pedidos
+      POSTGRES_DB: sistema_pedidos
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./services/order-service/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U t2delivery -d t2delivery"]
+      test: ["CMD-SHELL", "pg_isready -U sistema_pedidos -d sistema_pedidos"]
       interval: 5s
       timeout: 5s
       retries: 5
 
   catalog-service:
     build: ./services/catalog-service
-    container_name: t2-catalog
+    container_name: pedidos-catalog
     ports:
       - "5001:5001"
     healthcheck:
@@ -28,7 +28,7 @@ services:
 
   payment-service:
     build: ./services/payment-service
-    container_name: t2-payment
+    container_name: pedidos-payment
     ports:
       - "5002:5002"
     healthcheck:
@@ -39,13 +39,13 @@ services:
 
   order-service:
     build: ./services/order-service
-    container_name: t2-order
+    container_name: pedidos-order
     ports:
       - "5003:5003"
     environment:
       CATALOG_SERVICE_URL: http://catalog-service:5001
       PAYMENT_SERVICE_URL: http://payment-service:5002
-      DATABASE_URL: postgresql://t2delivery:t2delivery@postgres:5432/t2delivery
+      DATABASE_URL: postgresql://sistema_pedidos:sistema_pedidos@postgres:5432/sistema_pedidos
     depends_on:
       postgres:
         condition: service_healthy
@@ -61,7 +61,7 @@ services:
 
   api-gateway:
     build: ./services/api-gateway
-    container_name: t2-gateway
+    container_name: pedidos-gateway
     ports:
       - "5000:5000"
     environment:

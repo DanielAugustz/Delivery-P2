@@ -1,14 +1,14 @@
-# Render Blueprint — T2 Delivery
+# Render Blueprint — Sistema de Pedidos
 # Deploy: Dashboard Render → New → Blueprint → conecte este repositório
 #
 # PostgreSQL: o plano free permite apenas 1 banco por conta.
-# Não criamos banco aqui — configure DATABASE_URL manualmente no t2-order
-# (Dashboard → t2-order → Environment → Internal Database URL do Postgres existente).
+# Não criamos banco aqui — configure DATABASE_URL manualmente no pedidos-order
+# (Dashboard → pedidos-order → Environment → Internal Database URL do Postgres existente).
 # Sem DATABASE_URL o order-service usa memória (pedidos não persistem entre restarts).
 
 services:
   - type: web
-    name: t2-catalog
+    name: pedidos-catalog
     runtime: docker
     dockerfilePath: ./services/catalog-service/Dockerfile
     dockerContext: ./services/catalog-service
@@ -16,7 +16,7 @@ services:
     healthCheckPath: /health
 
   - type: web
-    name: t2-payment
+    name: pedidos-payment
     runtime: docker
     dockerfilePath: ./services/payment-service/Dockerfile
     dockerContext: ./services/payment-service
@@ -24,7 +24,7 @@ services:
     healthCheckPath: /health
 
   - type: web
-    name: t2-order
+    name: pedidos-order
     runtime: docker
     dockerfilePath: ./services/order-service/Dockerfile
     dockerContext: ./services/order-service
@@ -33,19 +33,19 @@ services:
     envVars:
       - key: CATALOG_SERVICE_URL
         fromService:
-          name: t2-catalog
+          name: pedidos-catalog
           type: web
           envVarKey: RENDER_EXTERNAL_URL
       - key: PAYMENT_SERVICE_URL
         fromService:
-          name: t2-payment
+          name: pedidos-payment
           type: web
           envVarKey: RENDER_EXTERNAL_URL
       - key: DATABASE_URL
         sync: false
 
   - type: web
-    name: delivery-p2
+    name: sistema-pedidos
     runtime: docker
     dockerfilePath: ./services/api-gateway/Dockerfile
     dockerContext: ./services/api-gateway
@@ -54,6 +54,6 @@ services:
     envVars:
       - key: ORDER_SERVICE_URL
         fromService:
-          name: t2-order
+          name: pedidos-order
           type: web
           envVarKey: RENDER_EXTERNAL_URL

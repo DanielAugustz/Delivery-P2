@@ -2,7 +2,7 @@
 
 ## 1. Descrição do Problema
 
-**T2 Delivery** é uma plataforma de pedidos de comida para pequenos restaurantes. O problema real abordado:
+**Sistema de Pedidos** é uma plataforma de pedidos de comida para pequenos restaurantes. O problema real abordado:
 
 - Clientes precisam escolher produtos, calcular valores e pagar de forma simples (PIX ou cartão).
 - O negócio precisa de serviços independentes: catálogo, pagamentos e pedidos — para escalar e manter cada parte separadamente.
@@ -133,7 +133,7 @@ docker compose up --build
 
 Acesse: **http://localhost:5000**
 
-- **postgres** (5432): banco `t2delivery`; schema em `services/order-service/init.sql`
+- **postgres** (5432): banco `sistema_pedidos`; schema em `services/order-service/init.sql`
 - **order-service** recebe `DATABASE_URL` e só sobe após postgres, catalog e payment estarem saudáveis
 
 ---
@@ -148,14 +148,14 @@ Repositório: `DanielAugustz/Delivery-P2`
 2. No Render: **Dashboard → New → Blueprint**
 3. Conecte o repositório e aplique o Blueprint
 4. O Render cria automaticamente:
-   - **t2-catalog**, **t2-payment**, **t2-order** — microsserviços Docker
-   - **delivery-p2** — api-gateway (único serviço público)
+   - **pedidos-catalog**, **pedidos-payment**, **pedidos-order** — microsserviços Docker
+   - **sistema-pedidos** — api-gateway (único serviço público)
 5. Variáveis ligadas pelo Blueprint:
-   - `t2-order`: `CATALOG_SERVICE_URL`, `PAYMENT_SERVICE_URL`
-   - `delivery-p2`: `ORDER_SERVICE_URL`
+   - `pedidos-order`: `CATALOG_SERVICE_URL`, `PAYMENT_SERVICE_URL`
+   - `sistema-pedidos`: `ORDER_SERVICE_URL`
 6. **PostgreSQL (opcional):** o plano free do Render permite **apenas 1 banco por conta**. O Blueprint **não cria** banco novo. Se você já tem Postgres no Render:
    - Copie a **Internal Database URL**
-   - Cole em **t2-order → Environment → `DATABASE_URL`**
+   - Cole em **pedidos-order → Environment → `DATABASE_URL`**
    - Sem essa variável, pedidos ficam em memória (somem ao reiniciar o serviço)
 
 Arquivo de referência: `render.yaml`. Instruções detalhadas: `docs/DEPLOY.md`.
@@ -163,9 +163,9 @@ Arquivo de referência: `render.yaml`. Instruções detalhadas: `docs/DEPLOY.md`
 ### Link publicado
 
 > **Substitua pela URL real do gateway após deploy:**
-> `https://delivery-p2.onrender.com`
+> `https://sistema-pedidos.onrender.com`
 
-*(A URL exata aparece no dashboard do serviço `delivery-p2`.)*
+*(A URL exata aparece no dashboard do serviço `sistema-pedidos`.)*
 
 ---
 
@@ -186,7 +186,7 @@ Arquivo de referência: `render.yaml`. Instruções detalhadas: `docs/DEPLOY.md`
 ## 12. Estrutura Completa do Repositório
 
 ```
-T2-Delivery/
+Sistema-de-Pedidos/
 ├── docs/
 │   ├── DOCUMENTACAO_PROVA.md   ← este arquivo
 │   └── DEPLOY.md
