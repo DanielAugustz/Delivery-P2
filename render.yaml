@@ -1,11 +1,10 @@
 # Render Blueprint — T2 Delivery
 # Deploy: Dashboard Render → New → Blueprint → conecte este repositório
-
-databases:
-  - name: t2-postgres
-    plan: free
-    databaseName: t2delivery
-    user: t2delivery
+#
+# PostgreSQL: o plano free permite apenas 1 banco por conta.
+# Não criamos banco aqui — configure DATABASE_URL manualmente no t2-order
+# (Dashboard → t2-order → Environment → Internal Database URL do Postgres existente).
+# Sem DATABASE_URL o order-service usa memória (pedidos não persistem entre restarts).
 
 services:
   - type: web
@@ -43,9 +42,7 @@ services:
           type: web
           envVarKey: RENDER_EXTERNAL_URL
       - key: DATABASE_URL
-        fromDatabase:
-          name: t2-postgres
-          property: connectionString
+        sync: false
 
   - type: web
     name: delivery-p2

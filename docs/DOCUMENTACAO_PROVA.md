@@ -148,12 +148,15 @@ Repositório: `DanielAugustz/Delivery-P2`
 2. No Render: **Dashboard → New → Blueprint**
 3. Conecte o repositório e aplique o Blueprint
 4. O Render cria automaticamente:
-   - **t2-postgres** — PostgreSQL (histórico persistente)
    - **t2-catalog**, **t2-payment**, **t2-order** — microsserviços Docker
    - **delivery-p2** — api-gateway (único serviço público)
 5. Variáveis ligadas pelo Blueprint:
-   - `order-service`: `CATALOG_SERVICE_URL`, `PAYMENT_SERVICE_URL`, `DATABASE_URL`
-   - `api-gateway`: `ORDER_SERVICE_URL`
+   - `t2-order`: `CATALOG_SERVICE_URL`, `PAYMENT_SERVICE_URL`
+   - `delivery-p2`: `ORDER_SERVICE_URL`
+6. **PostgreSQL (opcional):** o plano free do Render permite **apenas 1 banco por conta**. O Blueprint **não cria** banco novo. Se você já tem Postgres no Render:
+   - Copie a **Internal Database URL**
+   - Cole em **t2-order → Environment → `DATABASE_URL`**
+   - Sem essa variável, pedidos ficam em memória (somem ao reiniciar o serviço)
 
 Arquivo de referência: `render.yaml`. Instruções detalhadas: `docs/DEPLOY.md`.
 
