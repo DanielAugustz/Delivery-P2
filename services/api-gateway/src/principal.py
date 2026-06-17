@@ -20,6 +20,20 @@ def index():
     return render_template("index.html")
 
 
+@app.get("/warmup")
+def warmup():
+    payload: dict = {"status": "ok", "service": "api-gateway"}
+    try:
+        payload["order_service"] = _fachada.aquecer_servicos()
+        if payload["order_service"].get("status") != "ok":
+            payload["status"] = "degraded"
+    except Exception as erro:
+        payload["status"] = "degraded"
+        payload["order_service"] = {"status": "unreachable", "erro": str(erro)}
+    codigo = 200 if payload["status"] == "ok" else 503
+    return jsonify(payload), codigo
+
+
 @app.get("/health")
 def health():
     payload: dict = {"status": "ok", "service": "api-gateway"}

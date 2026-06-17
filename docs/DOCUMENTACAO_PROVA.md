@@ -19,7 +19,7 @@ A solução entrega uma interface web onde o usuário monta pedidos (vários pro
 | **catalog-service** | 5001 | Catálogo de produtos (PIZZA, BURGER) |
 | **payment-service** | 5002 | Processamento de pagamentos (PIX/Cartão) |
 | **order-service** | 5003 | Orquestração de pedidos (catálogo + pagamento + persistência) |
-| **api-gateway** | 5000 | Interface web + Facade para o cliente |
+| **api-gateway** | 5000 | Interface web + Facade para o cliente (`/warmup` acorda a cadeia de serviços) |
 
 
 **Justificativa:** cada bounded context (catálogo, pagamento, pedido) evolui e escala de forma independente. Falha isolada no pagamento não derruba o catálogo.
@@ -163,10 +163,7 @@ Arquivo de referência: `render.yaml`. Instruções detalhadas: `docs/DEPLOY.md`
 
 ### Link publicado
 
-> **Substitua pela URL real do gateway após deploy:**
-> `https://sistema-pedidos.onrender.com`
-
-*(A URL exata aparece no dashboard do serviço `sistema-pedidos`.)*
+> `https://sistema-pedidos-3fgz.onrender.com/`
 
 ---
 

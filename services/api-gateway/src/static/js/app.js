@@ -150,6 +150,19 @@ function excluirPedido(id) {
     });
 }
 
+function aquecerServicos(callback) {
+  fetch("/warmup")
+    .then(function (r) {
+      return r.json();
+    })
+    .then(function () {
+      if (callback) callback();
+    })
+    .catch(function () {
+      if (callback) callback();
+    });
+}
+
 function carregarHistorico() {
   fetch("/pedidos")
     .then(function (r) {
@@ -194,4 +207,4 @@ document.getElementById("form-pedido").onsubmit = function (e) {
     });
 };
 
-carregarHistorico();
+aquecerServicos(carregarHistorico);

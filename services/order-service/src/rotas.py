@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 
+import requests
 from flask import Blueprint, jsonify, request
 
 from pedido_casos_uso import CasoUsoCriarPedido, CasoUsoExcluirPedido, CasoUsoListarPedidos
@@ -9,6 +10,39 @@ from pedido_infra import AdaptadorCatalogoHttp, AdaptadorPagamentoHttp, obter_re
 
 order_bp = Blueprint("order", __name__)
 _repositorio = obter_repositorio()
+_WARMUP_TIMEOUT = int(os.getenv("WARMUP_TIMEOUT", "90"))
+
+
+def _normalizar_url(url: str) -> str:
+    url = url.strip().rstrip("/")
+    if not url.startswith(("http://", "https://")):
+        url = f"http://{url}"
+    return url
+
+
+def _ping_health(nome: str, url_base: str | None) -> dict:
+    if not url_base or not url_base.strip():
+        return {"service": nome, "status": "unconfigured"}
+    try:
+        resposta = requests.get(f"{_normalizar_url(url_base)}/health", timeout=_WARMUP_TIMEOUT)
+        resposta.raise_for_status()
+        dados = resposta.json()
+        return {"service": nome, "status": "ok", **dados}
+    except Exception as erro:
+        return {"service": nome, "status": "unreachable", "erro": str(erro)}
+
+
+def _aquecer_dependencias() -> dict:
+    catalog = _ping_health("catalog-service", os.getenv("CATALOG_SERVICE_URL"))
+    payment = _ping_health("payment-service", os.getenv("PAYMENT_SERVICE_URL"))
+    prontos = sum(1 for s in (catalog, payment) if s.get("status") == "ok")
+    return {
+        "status": "ok" if prontos == 2 else "degraded",
+        "service": "order-service",
+        "dependencias": [catalog, payment],
+        "prontos": prontos,
+        "total": 2,
+    }
 
 
 def _pedido_para_dict(pedido) -> dict:
@@ -49,6 +83,13 @@ def _extrair_itens(dados: dict):
 @order_bp.get("/health")
 def health():
     return jsonify({"status": "ok", "service": "order-service"})
+
+
+@order_bp.get("/warmup")
+def warmup():
+    resultado = _aquecer_dependencias()
+    codigo = 200 if resultado["status"] == "ok" else 503
+    return jsonify(resultado), codigo
 
 
 @order_bp.post("/pedidos")

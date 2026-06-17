@@ -19,6 +19,7 @@ class FachadaServicoPedidos:
         self._url_base = _normalizar_url(
             url_servico_pedidos or os.getenv("ORDER_SERVICE_URL", "http://order-service:5003")
         )
+        self._warmup_timeout = int(os.getenv("WARMUP_TIMEOUT", "120"))
 
     def criar_pedido(self, itens: list | dict, metodo_pagamento: str) -> dict:
         payload: dict = {"metodo_pagamento": metodo_pagamento}
@@ -52,3 +53,10 @@ class FachadaServicoPedidos:
         resposta = requests.get(f"{self._url_base}/health", timeout=5)
         resposta.raise_for_status()
         return resposta.json()
+
+    def aquecer_servicos(self) -> dict:
+        resposta = requests.get(f"{self._url_base}/warmup", timeout=self._warmup_timeout)
+        dados = resposta.json()
+        if resposta.status_code >= 400:
+            raise ValueError(dados.get("erro", "Falha ao aquecer microsserviços"))
+        return dados
