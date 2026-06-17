@@ -1,0 +1,98 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 1.5rem;
+  background: #fff;
+  color: #000;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+h1 {
+  margin: 0 0 1.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+h2 {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+label {
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+input,
+select,
+button {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  margin-top: 0.25rem;
+  font: inherit;
+}
+
+button {
+  width: auto;
+  cursor: pointer;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-header h2 {
+  margin: 0;
+}
+
+.lista {
+  margin: 0.75rem 0 0;
+  padding-left: 1.25rem;
+}
+
+.total {
+  margin: 0 0 0.5rem;
+}
+
+.vazio.hidden {
+  display: none;
+}
+
+.resultado {
+  margin-top: 1.5rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid #ccc;
+}
+
+.resultado.hidden {
+  display: none;
+}
+
+.resultado .log-linha {
+  margin: 0.25rem 0;
+}
+
+.resultado .produto {
+  margin-top: 0.5rem;
+}

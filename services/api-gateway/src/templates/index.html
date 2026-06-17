@@ -8,22 +8,24 @@
 </head>
 <body>
   <div class="page">
-    <header><h1>T2 Delivery</h1></header>
-    <main class="grid">
-      <section>
+    <header><h1>Sistema de Pedidos</h1></header>
+    <main>
+      <section class="painel-pedido">
         <h2>Novo pedido</h2>
         <form id="form-pedido">
           <fieldset class="produtos">
-            <legend>Produtos (quantidade)</legend>
-            <div class="linha-produto">
-              <span>Pizza Grande — R$ 50,00</span>
-              <input type="number" name="qtd_PIZZA" min="0" max="99" value="0" aria-label="Quantidade de pizza">
-            </div>
-            <div class="linha-produto">
-              <span>Hambúrguer Artesanal — R$ 30,00</span>
-              <input type="number" name="qtd_BURGER" min="0" max="99" value="0" aria-label="Quantidade de hambúrguer">
+            <legend>Adicionar produto</legend>
+            <div class="linha-adicionar">
+              <select id="select-produto" aria-label="Produto">
+                <option value="" disabled selected>Selecione...</option>
+                <option value="PIZZA">Pizza Grande — R$ 50,00</option>
+                <option value="BURGER">Hambúrguer Artesanal — R$ 30,00</option>
+              </select>
+              <input type="number" id="qtd-produto" min="1" max="99" value="1" aria-label="Quantidade">
+              <button type="button" id="btn-adicionar" class="btn-mais" title="Adicionar produto">+</button>
             </div>
           </fieldset>
+          <pre id="preview-carrinho" class="preview-carrinho hidden"></pre>
           <label>Pagamento
             <select name="metodo_pagamento" required>
               <option value="" disabled selected>Selecione...</option>
@@ -31,21 +33,15 @@
               <option value="CARTAO">Cartão</option>
             </select>
           </label>
-          <p id="valor-produto" class="valor">Subtotal: —</p>
           <button type="submit" id="btn-enviar">Fazer pedido</button>
         </form>
       </section>
-      <section>
-        <div class="card-header">
-          <h2>Pedidos realizados</h2>
-          <button type="button" id="btn-atualizar">Atualizar</button>
-        </div>
-        <p id="total-pedidos" class="total">Total: 0</p>
-        <ul id="lista-pedidos" class="lista"></ul>
-        <p id="lista-vazia" class="vazio">Nenhum pedido ainda.</p>
-      </section>
     </main>
-    <div id="resultado" class="resultado hidden"></div>
+    <div id="resultado" class="resultado">
+      <h3 class="log-titulo">Histórico de pedidos</h3>
+      <p id="historico-vazio" class="vazio">Nenhum pedido ainda.</p>
+      <div id="historico-pedidos"></div>
+    </div>
   </div>
   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>

@@ -1,6 +1,12 @@
 # Render Blueprint — T2 Delivery
 # Deploy: Dashboard Render → New → Blueprint → conecte este repositório
 
+databases:
+  - name: t2-postgres
+    plan: free
+    databaseName: t2delivery
+    user: t2delivery
+
 services:
   - type: web
     name: t2-catalog
@@ -36,6 +42,10 @@ services:
           name: t2-payment
           type: web
           envVarKey: RENDER_EXTERNAL_URL
+      - key: DATABASE_URL
+        fromDatabase:
+          name: t2-postgres
+          property: connectionString
 
   - type: web
     name: delivery-p2

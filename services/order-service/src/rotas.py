@@ -5,10 +5,10 @@ import os
 from flask import Blueprint, jsonify, request
 
 from pedido_casos_uso import CasoUsoCriarPedido, CasoUsoExcluirPedido, CasoUsoListarPedidos
-from pedido_infra import AdaptadorCatalogoHttp, AdaptadorPagamentoHttp, RepositorioPedidoMemoria
+from pedido_infra import AdaptadorCatalogoHttp, AdaptadorPagamentoHttp, obter_repositorio
 
 order_bp = Blueprint("order", __name__)
-_repositorio = RepositorioPedidoMemoria.obter_instancia()
+_repositorio = obter_repositorio()
 
 
 def _pedido_para_dict(pedido) -> dict:

@@ -38,6 +38,12 @@ class Pedido:
 
     def linhas_resumo(self) -> list[str]:
         linhas = ["--- Pedido Feito ---"]
+        try:
+            dt = datetime.fromisoformat(self.criado_em.replace("Z", "+00:00"))
+            linhas.append(f"Data: {dt.strftime('%d/%m/%Y %H:%M')} UTC")
+        except (ValueError, AttributeError):
+            if self.criado_em:
+                linhas.append(f"Data: {self.criado_em}")
         for item in self.itens:
             prefixo = f"{item.quantidade}x " if item.quantidade > 1 else ""
             linhas.append(f"  {prefixo}{item.nome}: R$ {item.subtotal:.2f}")
