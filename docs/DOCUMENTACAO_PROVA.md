@@ -91,7 +91,7 @@ services/<nome>/
 Local: `tests/tdd/`
 
 ```bash
-pip install -r requirements-dev.txt
+pip install -r requirements.txt
 python -m pytest tests/tdd -v
 ```
 
@@ -153,9 +153,10 @@ Repositório: `DanielAugustz/Delivery-P2`
 5. Variáveis ligadas pelo Blueprint:
    - `pedidos-order`: `CATALOG_SERVICE_URL`, `PAYMENT_SERVICE_URL`
    - `sistema-pedidos`: `ORDER_SERVICE_URL`
-6. **PostgreSQL (opcional):** o plano free do Render permite **apenas 1 banco por conta**. O Blueprint **não cria** banco novo. Se você já tem Postgres no Render:
+6. **PostgreSQL:** o plano free permite **apenas 1 banco por conta**. O Blueprint **não cria** banco — crie manualmente:
+   - Render → **New + → PostgreSQL** (plan Free)
    - Copie a **Internal Database URL**
-   - Cole em **pedidos-order → Environment → `DATABASE_URL`**
+   - Cole em **`DATABASE_URL`** quando o Blueprint pedir (ou depois em **pedidos-order → Environment**)
    - Sem essa variável, pedidos ficam em memória (somem ao reiniciar o serviço)
 
 Arquivo de referência: `render.yaml`. Instruções detalhadas: `docs/DEPLOY.md`.
@@ -202,7 +203,7 @@ Sistema-de-Pedidos/
 ├── docker-compose.yml
 ├── render.yaml
 ├── pytest.ini
-├── requirements-dev.txt
+├── requirements.txt            ← dependências de teste (pytest, pytest-bdd)
 └── README.md
 ```
 
