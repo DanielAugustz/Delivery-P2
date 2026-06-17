@@ -1,4 +1,4 @@
-# T2 Delivery — Plataforma de Pedidos (Prova Acadêmica)
+# Plataforma de Pedidos (Prova Acadêmica)
 
 Plataforma de delivery com pizza e hambúrguer. Pagamento PIX (5% desconto) ou cartão.
 Arquitetura de **4 microsserviços** com Arquitetura Limpa, SOLID, TDD e BDD.
